@@ -17,12 +17,6 @@ var blogSchema = new mongoose.Schema({
 });
 var Blog = mongoose.model("blogs", blogSchema);
 
-Blog.create({
-	title: "Dog",
-	image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80",
-	body: "this is a dog blog"
-});
-
 //Routes
 app.get("/blogs",function(req, res){
 	Blog.find({},function(err, blog){
