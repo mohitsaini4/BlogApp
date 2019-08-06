@@ -46,6 +46,17 @@ app.post("/blogs", function(req, res){
 	
 });
 
+//show route
+app.get("/blogs/:id", function(req, res){
+	Blog.findById(req.params.id, function(err, foundBlog){
+		if(err){
+			res.send("error");
+		} else {
+			res.render("show.ejs" ,{blog: foundBlog});
+		}
+	});
+});
+
 
 app.listen(8000, function(){
 	console.log("Server Started");
