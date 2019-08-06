@@ -1,11 +1,13 @@
 var express= require("express");
 var mongoose= require("mongoose");
-var bodyParser = require("body-parser");
+var methodOverride = require("method-override");
 var app = express();
+var bodyParser = require("body-parser");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(methodOverride("_method"));
 
 mongoose.connect('mongodb://localhost:27017/BlogApp', {useNewUrlParser: true});
 
@@ -52,11 +54,32 @@ app.get("/blogs/:id", function(req, res){
 		if(err){
 			res.send("error");
 		} else {
-			res.render("show.ejs" ,{blog: foundBlog});
+			res.render("show.ejs" ,{ blog: foundBlog });
 		}
 	});
 });
 
+//edit route
+app.get("/blogs/:id/edit", function(req, res){
+	Blog.findById(req.params.id, function(err, foundBlog){
+		if(err){
+			res.send("error");
+		} else {
+			res.render("edit.ejs" ,{ blog: foundBlog });
+		}
+	});
+});
+
+// Update route
+app.put("/blogs/:id", function(req, res){
+	Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updatedBlog){
+		if(err){
+			res.send("error");
+		} else {
+			res.redirect("/blogs/"+req.params.id);
+		}
+	});
+});
 
 app.listen(8000, function(){
 	console.log("Server Started");
